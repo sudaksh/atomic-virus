@@ -1,5 +1,8 @@
 package dataStructures;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -89,6 +92,43 @@ public class BinarySearchTree<T extends Comparable<T>> {
 			return 0;
 		else
 			return Math.max(getDepth(node.getLeftChildNode()), getDepth(node.getRightChildNode())) + 1;
+	}
+
+	public long getWidthForLevel(long level ) {
+		return getWidth(rootNode,level);
+	}
+
+	private long getWidth(BSTNode currentNode, long level) {
+		if(currentNode == null)
+			return 0;
+		if(level == 1)
+				return 1;
+		else
+			return getWidth(currentNode.getLeftChildNode(), level -1) + getWidth(currentNode.getRightChildNode(), level - 1);
+	}
+
+	public long getMaxWidthUsingPreOrderTraversal() {
+		Long[] nodesPerLevel = new Long[(int)getDepth()];
+		for(int i=0 ; i < getDepth() ; i++)
+			nodesPerLevel[i] = 0l;
+		populateLevelWidths(rootNode, 0, nodesPerLevel);
+		return Collections.max(Arrays.asList(nodesPerLevel));
+	}
+
+	private void populateLevelWidths(BSTNode node, int currentLevel , Long[] nodesPerLevel) {
+		if(node != null){
+			nodesPerLevel[currentLevel]++;
+			populateLevelWidths(node.getLeftChildNode(), currentLevel + 1, nodesPerLevel);
+			populateLevelWidths(node.getRightChildNode(), currentLevel + 1, nodesPerLevel);
+		}
+	}
+
+	public long getMaxWidthUsingGetWidthMethod() {
+		long depth = getDepth();
+		List<Long> widthPerLevel = new ArrayList<Long>((int)getDepth());
+		for(int i =0 ; i< depth-1; i++)
+			widthPerLevel.add(getWidthForLevel(i+1));
+		return Collections.max(widthPerLevel);
 	}
 	
 }
