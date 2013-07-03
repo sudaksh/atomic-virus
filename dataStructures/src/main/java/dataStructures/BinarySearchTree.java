@@ -42,6 +42,12 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		}
 		
 	}
+	
+
+	public void addElements(List<T> elements) {
+		for(T element : elements)
+			addElement(element);
+	}
 
 	public BSTNode addElement(T element) {
 		BSTNode newNode = new BSTNode(element);
@@ -76,11 +82,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
 	}
 
 	private void inOrderTraversal(List<T> list , BSTNode currentNode) {
-		if(currentNode.getLeftChildNode() != null)
+		if(currentNode != null){
 			inOrderTraversal(list, currentNode.getLeftChildNode());
-		list.add(currentNode.getValue());
-		if(currentNode.getRightChildNode() != null)
+			list.add(currentNode.getValue());
 			inOrderTraversal(list, currentNode.getRightChildNode());
+		}
 	}
 
 	public long getDepth() {
@@ -129,6 +135,113 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		for(int i =0 ; i< depth-1; i++)
 			widthPerLevel.add(getWidthForLevel(i+1));
 		return Collections.max(widthPerLevel);
+	}
+
+	public void removeDuplicates() {
+		removeDuplicatesPreOrderTraversal(rootNode);
+	}
+
+	private void removeDuplicatesPreOrderTraversal(BSTNode currentNode) {
+		if(currentNode != null){
+			searchAndDeleteNextDuplicate(currentNode);
+			removeDuplicatesPreOrderTraversal(currentNode.getLeftChildNode());
+			removeDuplicatesPreOrderTraversal(currentNode.getRightChildNode());
+		}
+	}
+
+	private void searchAndDeleteNextDuplicate(BSTNode originalNode) {
+		if(originalNode.getRightChildNode() != null){
+			BSTNode currentNode = originalNode.getRightChildNode();
+			BSTNode parentOfDuplicate = originalNode;
+			boolean isLeftChild = false;
+			boolean hasDuplicate = false;
+			while(currentNode.getLeftChildNode() != null){
+				parentOfDuplicate = currentNode;
+				currentNode = currentNode.getLeftChildNode();
+				isLeftChild = true;
+			}
+			if(currentNode.getValue().compareTo(originalNode.getValue()) == 0){
+				hasDuplicate = true;
+				deleteNode(currentNode, parentOfDuplicate, isLeftChild);
+			}
+			if(hasDuplicate)
+				searchAndDeleteNextDuplicate(originalNode);
+		}
+	}
+
+
+	public boolean contains(T val) {
+		return (searchElement(val) !=null);
+	}
+
+	public BSTNode searchElement(T searchElement) {
+		BSTNode currentNode = rootNode;
+		while(currentNode !=null && currentNode.getValue().compareTo(searchElement) !=0 ){
+			if(searchElement.compareTo(currentNode.getValue()) >0){
+				currentNode = currentNode.getRightChildNode();
+			}else {
+				currentNode = currentNode.getLeftChildNode();
+			}
+		}
+		return currentNode;
+	}
+
+	public void deleteElement(T element) {
+		BSTNode nodeToBeDeleted = rootNode;
+		BSTNode parentNode = null;
+		boolean isLeftChild = false;
+		while(nodeToBeDeleted !=null && nodeToBeDeleted.getValue().compareTo(element) !=0 ){
+			parentNode = nodeToBeDeleted;
+			if(element.compareTo(nodeToBeDeleted.getValue()) >0){
+				nodeToBeDeleted = nodeToBeDeleted.getRightChildNode();
+				isLeftChild = false;
+			}else {
+				nodeToBeDeleted = nodeToBeDeleted.getLeftChildNode();
+				isLeftChild = true;
+			}
+		}
+		if(nodeToBeDeleted != null)
+			deleteNode(nodeToBeDeleted, parentNode, isLeftChild);
+		
+	}
+
+	private void deleteNode(BSTNode nodeToBeDeleted, BSTNode parentNode, boolean isLeftChild) {
+		BSTNode replacementNode = null;
+		if(nodeToBeDeleted.getLeftChildNode() == null){
+			replacementNode = nodeToBeDeleted.getRightChildNode();
+		}else if (nodeToBeDeleted.getRightChildNode() == null) {
+			replacementNode = nodeToBeDeleted.getLeftChildNode();
+		}else {
+			//Both children are present.
+			replacementNode = getSuccessorForReplacement(nodeToBeDeleted);
+		}
+		if(nodeToBeDeleted != rootNode){
+			if(isLeftChild)
+				parentNode.leftChildNode = replacementNode;
+			else
+				parentNode.rightChildNode = replacementNode;
+		}else {
+			rootNode = replacementNode;
+		}
+	}
+
+	private BSTNode getSuccessorForReplacement(BSTNode nodeToBeDeleted) {
+		BSTNode replacementNode;
+		replacementNode = nodeToBeDeleted.getRightChildNode();
+		BSTNode parentOfReplacementNode = nodeToBeDeleted;
+		while(replacementNode.getLeftChildNode() != null){
+			parentOfReplacementNode = replacementNode;
+			replacementNode = replacementNode.getLeftChildNode();
+		}
+		if(parentOfReplacementNode == nodeToBeDeleted){
+			replacementNode.leftChildNode = nodeToBeDeleted.getLeftChildNode();
+			
+		}else {
+			parentOfReplacementNode.leftChildNode = replacementNode.getRightChildNode();
+			replacementNode.leftChildNode = nodeToBeDeleted.getLeftChildNode();
+			replacementNode.rightChildNode = nodeToBeDeleted.getRightChildNode();
+		}
+		return replacementNode;
 	}
 	
 }
