@@ -7,11 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class BinarySearchTree<T extends Comparable<T>> {
+public class BinarySearchTree<T extends Comparable<T>> implements BST<T> {
 	
 	private BinarySearchTree<T>.BSTNode rootNode ;
 	
-	public class BSTNode {
+	public class BSTNode implements BTNode<T> {
 		private T value;
 		private BSTNode leftChildNode , rightChildNode;
 		
@@ -31,6 +31,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
 			return value;
 		}
 		
+		public void setValue(T value) {
+			this.value = value;
+		}
+		
 		public int compareTo(BSTNode o) {
 			return value.compareTo(o.getValue());
 		}
@@ -39,6 +43,21 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		public String toString() {
 			// TODO Auto-generated method stub
 			return value.toString();
+		}
+
+		public void setLeftNode(BTNode<T> leftNode) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void setRightNode(BTNode<T> leftNode) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public int compareTo(T element) {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 		
 	}
@@ -100,11 +119,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
 			return Math.max(getDepth(node.getLeftChildNode()), getDepth(node.getRightChildNode())) + 1;
 	}
 
-	public long getWidthForLevel(long level ) {
+	public int getWidthForLevel(int level ) {
 		return getWidth(rootNode,level);
 	}
 
-	private long getWidth(BSTNode currentNode, long level) {
+	private int getWidth(BSTNode currentNode, int level) {
 		if(currentNode == null)
 			return 0;
 		if(level == 1)
@@ -133,7 +152,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		long depth = getDepth();
 		List<Long> widthPerLevel = new ArrayList<Long>((int)getDepth());
 		for(int i =0 ; i< depth-1; i++)
-			widthPerLevel.add(getWidthForLevel(i+1));
+			widthPerLevel.add( Integer.valueOf(getWidthForLevel(i+1)).longValue());
 		return Collections.max(widthPerLevel);
 	}
 
