@@ -3,15 +3,16 @@ package dataStructureUtils;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import dataStructures.BinarySearchTree;
+import dataStructures.BST;
+import dataStructures.BTNode;
 
 public class BinaryTreePrinter {
 	
 	private String delimiter = "   ";
 	private String emptyNode = "___";
 
-	public <T extends Comparable<T>> void printLevelOrder(BinarySearchTree<T> binaryTree) {
-		Queue<BinarySearchTree<T>.BSTNode> levelOrderQueue = new LinkedList<BinarySearchTree<T>.BSTNode>();
+	public <T extends Comparable<T>> void printLevelOrder(BST<T> binaryTree) {
+		Queue<BTNode<T>> levelOrderQueue = new LinkedList<BTNode<T>>();
 		levelOrderQueue.add(binaryTree.getRootNode());
 		long nodesInCurrentLevel = 1;
 		long currentLevel = 1;
@@ -23,7 +24,7 @@ public class BinaryTreePrinter {
 		
 		while(!levelOrderQueue.isEmpty() && currentFloor >0){
 			
-			BinarySearchTree<T>.BSTNode currentNode = levelOrderQueue.poll();
+			BTNode<T> currentNode = levelOrderQueue.poll();
 			nodesInCurrentLevel--;
 			
 			if(currentNode !=null){
