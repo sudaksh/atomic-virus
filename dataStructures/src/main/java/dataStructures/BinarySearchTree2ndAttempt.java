@@ -297,4 +297,28 @@ public class BinarySearchTree2ndAttempt<T extends Comparable<T>> implements BST<
 
 	}
 	
+	
+	public T findClosestCommonAncestor(T element1, T element2) {
+		return findClosestCommonAncestor(rootNode , element1 , element2);
+	}
+
+	private T findClosestCommonAncestor(BTNode<T> node, T element1, T element2) {
+		if(node == null)
+			return null;
+
+		int compareToElement1 = node.compareTo(element1);
+		int compareToElement2 = node.compareTo(element2);
+		int compareToSum = compareToElement1 + compareToElement2;
+
+		if(compareToSum == 2) {
+			return findClosestCommonAncestor(node.getLeftChildNode(), element1, element2);
+		} else if (compareToSum == -2) {
+			return findClosestCommonAncestor(node.getRightChildNode(), element1, element2);
+		} else if (compareToSum == 0 || compareToSum == 1 || compareToSum == -1) {
+			return node.getValue();
+		}
+
+		return null;
+	}
+	
 }

@@ -263,4 +263,9 @@ public class BinarySearchTree<T extends Comparable<T>> implements BST<T> {
 		return replacementNode;
 	}
 	
+	public T findClosestCommonAncestor(T element1, T element2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

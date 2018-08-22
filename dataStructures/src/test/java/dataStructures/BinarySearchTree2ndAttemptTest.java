@@ -115,10 +115,20 @@ public class BinarySearchTree2ndAttemptTest extends TestCase {
 	@Test
 	public void testRemoveDuplicates() {
 		binarySearhTreeDepthFive.addElements(Arrays.asList(new Integer[] {500,333,500,444,200,200,500}));
-		printTreeToConsole(binarySearhTreeDepthFive);
+//		printTreeToConsole(binarySearhTreeDepthFive);
 		binarySearhTreeDepthFive.removeDuplicates();
-		printTreeToConsole(binarySearhTreeDepthFive);
+//		printTreeToConsole(binarySearhTreeDepthFive);
 		assertTrue("Tree still contains some duplicates", !doesSortedListContainDuplicates(binarySearhTreeDepthFive.traverseInOrder()));
+	}
+	
+	@Test
+	public void testFindClosestCommonAncestor() {
+		assertEquals(Integer.valueOf(764),binarySearhTreeDepthFive.findClosestCommonAncestor(600,888));
+		assertEquals(Integer.valueOf(333),binarySearhTreeDepthFive.findClosestCommonAncestor(123,378));
+		assertEquals(Integer.valueOf(333),binarySearhTreeDepthFive.findClosestCommonAncestor(333,378));
+		assertEquals(Integer.valueOf(764),binarySearhTreeDepthFive.findClosestCommonAncestor(600,1000));
+		assertEquals(null,binarySearhTreeDepthFive.findClosestCommonAncestor(90000,9000000));
+
 	}
 	
 
