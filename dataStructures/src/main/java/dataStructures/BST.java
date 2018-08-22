@@ -28,4 +28,6 @@ public interface BST<T extends Comparable<T>> {
 
 	void removeDuplicates();
 
+	T findClosestCommonAncestor(T element1, T element2);
+
 }
